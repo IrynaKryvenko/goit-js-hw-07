@@ -20,13 +20,19 @@ function onGalleryClick(event) {
     return;
   }
     
-    const source = event.target.dataset.source;
-    
-    
+const source = event.target.dataset.source;
     
   const instance = basicLightbox.create(`
     <img src="${source}" width="800" height="600">`);
 
     instance.show();
-}
+
+    galleryRef.addEventListener('keydown', onEscapeKey);
+
+    function onEscapeKey(event) {
+        if (event.code === 'Escape') {
+            instance.close();
+        };
+    };
+};
 
