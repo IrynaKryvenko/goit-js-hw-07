@@ -5,7 +5,7 @@ const galleryRef = document.querySelector(".gallery");
 const galleryMarkup = galleryItems
   .map(
     ({ preview, original, description }) =>
-      `<li class="gallery__item"> <a class="gallery__link" href="${original}"> <img class="gallery__image" src="${preview}" data-source"${original}" alt="${description}"> </a> </li>`
+      `<li class="gallery__item"> <a class="gallery__link" href="${original}"> <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"> </a> </li>`
   )
   .join("");
 
@@ -22,12 +22,21 @@ function onGalleryClick(event) {
     
 const source = event.target.dataset.source;
     
-  const instance = basicLightbox.create(`
-    <img src="${source}" width="800" height="600">`);
+ const instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}">`,
+    {
+      onShow: (instance) => {
+        document.addEventListener("keydown", onEscapeKey);
+      },
+      onClose: (instance) => {
+        document.removeEventListener("keydown", onEscapeKey);
+      },
+    }
+  );
+  instance.show();
 
-    instance.show();
 
-    galleryRef.addEventListener('keydown', onEscapeKey);
+    window.addEventListener('keydown', onEscapeKey);
 
     function onEscapeKey(event) {
         if (event.code === 'Escape') {
